@@ -1,0 +1,21 @@
+/* components/Content/Content.module.css */
+
+.content {
+   flex: 1;
+    padding: 15px 20px; /* Giảm padding tổng thể */
+    overflow-y: auto
+}
+
+.pageContent {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.pageContent.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

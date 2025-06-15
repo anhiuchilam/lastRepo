@@ -1,0 +1,129 @@
+/* components/PageContents/ProductsPageContent.module.css */
+
+.productTable {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.tableHeader {
+    background: var(--light-bg);
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: grid;
+    grid-template-columns: 60px 1fr 120px 80px 120px; /* For desktop */
+    gap: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.tableRow {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: grid;
+    grid-template-columns: 60px 1fr 120px 80px 120px; /* For desktop */
+    gap: 20px;
+    align-items: center;
+    transition: background 0.2s ease;
+}
+
+.tableRow:hover {
+    background: var(--light-bg);
+}
+
+.tableRow:last-child {
+    border-bottom: none;
+}
+
+.productImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: var(--light-bg);
+    flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.productInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden; /* Hide overflowing text */
+}
+
+.productName {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis for long names */
+}
+
+.productDesc {
+    font-size: 12px;
+    color: var(--secondary-text-color);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.productPrice {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+}
+
+.productActions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap; /* Allow buttons to wrap if needed */
+    justify-content: flex-end; /* Align actions to the right */
+}
+
+.actionBtn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.editBtn {
+    background: var(--primary-blue);
+    color: white;
+}
+
+.deleteBtn {
+    background: var(--dark-red);
+    color: white;
+}
+
+.actionBtn:hover {
+    opacity: 0.8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .tableHeader,
+    .tableRow {
+        grid-template-columns: 60px 1fr 80px 100px; /* Removed "Mô tả" column */
+        gap: 10px;
+    }
+
+    .hideMobile {
+        display: none; /* Hide description column on small screens */
+    }
+
+    .productActions {
+        justify-content: center; /* Center actions on small screens */
+    }
+}

@@ -1,0 +1,32 @@
+/* app/globals.css */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Define CSS variables */
+:root {
+    --sidebar-width-expanded: 250px;
+    --sidebar-width-collapsed: 60px;
+    --primary-blue: #007bff;
+    --secondary-text-color: #6c757d;
+    --border-color: #e9ecef;
+    --light-bg: #f8f9fa;
+    --dark-bg-hover: #f0f0f0;
+    --dark-red: #dc3545;
+    --dark-blue-hover: #0056b3;
+}

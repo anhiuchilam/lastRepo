@@ -1,0 +1,56 @@
+/* components/Pagination/Pagination.module.css */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pageBtn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-color);
+    background: white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--secondary-text-color);
+    transition: all 0.2s ease;
+}
+
+.pageBtn.active {
+    background: var(--primary-blue);
+    color: white;
+    border-color: var(--primary-blue);
+}
+
+.pageBtn:hover:not(.active) {
+    background: var(--light-bg);
+}
+
+.pageBtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+.welcomeCard {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.welcomeCard h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.welcomeCard p {
+    color: var(--secondary-text-color);
+    font-size: 16px;
+}

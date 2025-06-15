@@ -1,0 +1,51 @@
+/* components/PageContents/HomePageContent.module.css */
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.statCard {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.statNumber {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-blue);
+    margin-bottom: 5px;
+}
+
+.statLabel {
+    font-size: 14px;
+    color: var(--secondary-text-color);
+}
+
+.welcomeCard {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.welcomeCard h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.welcomeCard p {
+    color: var(--secondary-text-color);
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+}
