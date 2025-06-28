@@ -3,7 +3,22 @@
 
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBoxOpen, faClipboardList, faBullhorn, faUser, faCog, faAngleLeft, faAngleRight, faTags, IconDefinition } from '@fortawesome/free-solid-svg-icons'; // Import faTags
+// Import tất cả các icon cần thiết cho menu
+import { 
+  faHome, 
+  faBoxOpen, 
+  faClipboardList, 
+  faBullhorn, 
+  faUser, // Icon User vẫn được import nhưng không dùng nếu Profile bị xóa
+  faCog, 
+  faAngleLeft, 
+  faAngleRight, 
+  faTags,     // Icon cho danh mục
+  faUsers,    // Icon cho khách hàng
+  faPercent,  // Icon cho mã giảm giá (hoặc faTag)
+  IconDefinition 
+} from '@fortawesome/free-solid-svg-icons'; 
+
 import styles from './Sidebar.module.css';
 
 interface MenuItem {
@@ -24,9 +39,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, activePag
     { id: 'home', name: 'Trang chủ', icon: faHome },
     { id: 'products', name: 'Quản lý sản phẩm', icon: faBoxOpen },
     { id: 'orders', name: 'Quản lý đơn hàng', icon: faClipboardList },
-    { id: 'categories', name: 'Quản lý danh mục', icon: faTags }, // Thêm mục mới ở đây
+    { id: 'categories', name: 'Quản lý danh mục', icon: faTags },
+    { id: 'customers', name: 'Quản lý khách hàng', icon: faUsers },
+    { id: 'discount_codes', name: 'Mã giảm giá', icon: faPercent }, // MỤC MỚI NHẤT
     { id: 'promote', name: 'Promote', icon: faBullhorn },
-    { id: 'profile', name: 'Profile', icon: faUser },
+    // MỤC PROFILE ĐÃ BỊ XÓA THEO YÊU CẦU TRƯỚC ĐÓ
+    // { id: 'profile', name: 'Profile', icon: faUser }, 
     { id: 'settings', name: 'Setting', icon: faCog },
   ];
 

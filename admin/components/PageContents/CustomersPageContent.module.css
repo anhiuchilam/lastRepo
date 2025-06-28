@@ -1,0 +1,108 @@
+/* components/PageContents/CustomersPageContent.module.css */
+
+.customerPageHeader {
+  display: flex;
+  justify-content: flex-end; /* Vẫn giữ flex-end cho nếu có title hoặc các element khác muốn ở đây */
+  margin-bottom: 20px;
+}
+
+/* XÓA style cho nút "+ Thêm khách hàng" vì không còn dùng */
+/* .addCustomerBtn { ... } */
+/* .addCustomerBtn:hover { ... } */
+
+.customerTable {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.tableHeader {
+  background: var(--light-bg);
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: grid;
+  /* Đã bỏ cột "Chức năng" (120px) */
+  grid-template-columns: 60px 1.5fr 1.5fr 120px 2fr; /* ID, Tên, Email, SĐT, Địa chỉ */
+  gap: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.tableRow {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: grid;
+  /* Đã bỏ cột "Chức năng" */
+  grid-template-columns: 60px 1.5fr 1.5fr 120px 2fr; /* ID, Tên, Email, SĐT, Địa chỉ */
+  gap: 20px;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.tableRow:hover {
+  background: var(--light-bg);
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+/* XÓA style cho các nút hành động vì không còn dùng */
+/* .customerActions { ... } */
+/* .actionBtn { ... } */
+/* .editBtn { ... } */
+/* .deleteBtn { ... } */
+/* .actionBtn:hover { ... } */
+
+.noResults {
+  text-align: center;
+  padding: 20px;
+  color: var(--secondary-text-color);
+}
+
+/* XÓA TOÀN BỘ style cho Modal vì không còn dùng */
+/* .modalOverlay { ... } */
+/* .modalContent { ... } */
+/* .closeButton { ... } */
+/* .modalContent h3 { ... } */
+/* .formGrid { ... } */
+/* .formGroup { ... } */
+/* .formInput, .formTextarea, .formSelect { ... } */
+/* .formInput:focus, .formTextarea:focus, .formSelect:focus { ... } */
+/* .formError { ... } */
+/* .modalActions { ... } */
+/* .saveBtn, .cancelBtn { ... } */
+/* .saveBtn:hover { ... } */
+/* .saveBtn:disabled { ... } */
+/* .cancelBtn:hover { ... } */
+/* @keyframes slideIn { ... } */
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  /* XÓA TOÀN BỘ RESPONSIVE CHO MODAL */
+  /* .modalContent { ... } */
+  /* .modalContent h3 { ... } */
+  /* .formGrid { ... } */
+  /* .formGroup label { ... } */
+  /* .formGroup input, .formGroup textarea { ... } */
+  /* .modalActions { ... } */
+  /* .saveBtn, .cancelBtn { ... } */
+
+  /* Responsive cho bảng khách hàng */
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 60px 1.5fr 1fr 100px; /* Ẩn Email (1.5fr) và Địa chỉ (2fr) hoặc SĐT và Địa chỉ */
+    gap: 10px;
+  }
+  .tableHeader div:nth-child(3), /* Ẩn cột Email */
+  .tableRow div:nth-child(3) {
+    display: none;
+  }
+  .hideMobile { /* Đảm bảo cột SĐT và Địa chỉ bị ẩn */
+    display: none;
+  }
+  /* XÓA responsive cho customerActions nếu không còn nút */
+  /* .customerActions { justify-content: center; } */
+}
