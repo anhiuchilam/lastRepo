@@ -1,91 +1,197 @@
-// components/PageContents/ProductsPageContent.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React, { useState } from 'react';
-import Image from "next/image";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import styles from './ProductsPageContent.module.css';
-import sharedStyles from '../Content/Content.module.css';
-import Pagination from '../Pagination/Pagination';
+import ProductFormModal from "../Products/ProductFormModal";
+import DeleteConfirmModal from "../Products/DeleteConfirmModal";
 
-interface Product {
-  id: number;
-  name: string;
-  desc: string;
-  price: string;
-  imageUrl: string;
-}
+// Interfaces
+interface Category { id: number; name: string; slug: string; }
+interface Product { id: number; name: string; slug: string; description: string; price: string | null; discount_price: string | null; image: string | null; category: Category; }
+interface ApiResponse { data: Product[]; meta: any; links: any; }
+type FormValues = { name: string; description: string; price?: number; discount_price?: number; category_id: number; product_type: 'simple' | 'variable'; image?: FileList; };
 
-interface ProductsPageContentProps {
-  isActive: boolean;
-  searchTerm: string;
-}
+// Custom hook: fetch products
+const useProducts = (page: number) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [pagination, setPagination] = useState<ApiResponse['meta'] | null>(null);
+  const [loading, setLoading] = useState(true);
 
-const initialProducts: Product[] = [
-  // Sửa đường dẫn ảnh cho sản phẩm đầu tiên ở đây
-  { id: 1, name: 'Set 12 Thìa ăn Vỉ Dao', desc: 'Bộ dao thìa 100% không gỉ chính thương hiệu từ 5 đến 8 đúng hàng trình.', price: '1,658,000đ', imageUrl: '/img/08.webp' },
-  { id: 2, name: 'Set 8 Thìa ăn Vỉ Dao', desc: 'Bộ dao 100% không gỉ sáng phẩm chính hãng là 6 đến 8 đúng hàng trình.', price: '709,000đ', imageUrl: '/placeholder-product.svg' },
-  { id: 3, name: 'Set 24 Thìa ăn Vỉ Dao', desc: 'Bộ đũng 100% không gỉ sáng phẩm chính hãng là 8 đến 8 đúng hàng trình.', price: '3,198,000đ', imageUrl: '/placeholder-product.svg' },
-  { id: 4, name: 'Set 24 Thìa ăn Vỉ Dao (Phiên bản 2)', desc: 'Bộ đũng 100% không gỉ sáng phẩm chính hãng là 8 đến 8 đúng hàng trình.', price: '3,198,000đ', imageUrl: '/placeholder-product.svg' },
-];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`http://localhost:8000/api/v1/products?page=${page}`);
+        const json: ApiResponse = await res.json();
+        setProducts(json.data);
+        setPagination(json.meta);
+      } catch (err) {
+        console.error('Lỗi tải sản phẩm:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [page]);
 
-const ProductsPageContent: React.FC<ProductsPageContentProps> = ({ isActive, searchTerm }) => {
-  const [products, setProducts] = useState<Product[]>(initialProducts);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage: number = 4;
+  return { products, pagination, loading, refresh: () => setLoading(true) };
+};
 
-  const filteredProducts = products.filter((product: Product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+// Custom hook: fetch categories
+const useCategories = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  const totalPages: number = Math.ceil(filteredProducts.length / itemsPerPage);
-  const startIndex: number = (currentPage - 1) * itemsPerPage;
-  const endIndex: number = startIndex + itemsPerPage;
-  const currentProducts: Product[] = filteredProducts.slice(startIndex, endIndex);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(`http://localhost:8000/api/v1/categories`);
+        const json = await res.json();
+        setCategories(json.data);
+      } catch (err) {
+        console.error('Lỗi tải danh mục:', err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
-  const handleEdit = (product: Product) => {
-    alert(`Chỉnh sửa sản phẩm: ${product.name}`);
+  return categories;
+};
+
+// Hook modal state
+const useProductModals = () => {
+  const [isFormModalOpen, setFormModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
+
+  return {
+    isFormModalOpen, setFormModalOpen,
+    isDeleteModalOpen, setDeleteModalOpen,
+    editingProduct, setEditingProduct,
+    deletingProduct, setDeletingProduct,
+    openAddModal: () => { setEditingProduct(null); setFormModalOpen(true); },
+    openEditModal: (p: Product) => { setEditingProduct(p); setFormModalOpen(true); },
+    openDeleteModal: (p: Product) => { setDeletingProduct(p); setDeleteModalOpen(true); },
+    closeAll: () => {
+      setFormModalOpen(false);
+      setDeleteModalOpen(false);
+      setEditingProduct(null);
+      setDeletingProduct(null);
+    },
   };
+};
 
-  const handleDelete = (productId: number) => {
-    if (window.confirm(`Bạn có chắc chắn muốn xóa sản phẩm này?`)) {
-      setProducts(products.filter((p: Product) => p.id !== productId));
-      alert('Đã xóa sản phẩm');
+const ProductsPageContent = () => {
+  const [page, setPage] = useState(1);
+  const { products, pagination, loading, refresh } = useProducts(page);
+  const categories = useCategories();
+  const modals = useProductModals();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Form submit handler
+  const handleFormSubmit = async (data: FormValues) => {
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('description', data.description);
+    if (data.price !== undefined) formData.append('price', String(data.price));
+    if (data.discount_price !== undefined) formData.append('discount_price', String(data.discount_price));
+    formData.append('category_id', String(data.category_id));
+    formData.append('product_type', data.product_type);
+    if (data.image?.length) formData.append('image', data.image[0]);
+    if (modals.editingProduct) formData.append('_method', 'PUT');
+
+    const url = modals.editingProduct
+      ? `http://localhost:8000/api/v1/products/${modals.editingProduct.id}`
+      : 'http://localhost:8000/api/v1/products';
+    console.log(url, data);
+    
+    try {
+      const res = await fetch(url, { method: 'POST', body: formData });
+      if (!res.ok) throw new Error('Có lỗi xảy ra');
+      refresh();
+      modals.closeAll();
+    } catch (err) {
+      console.error(err);
+      alert(err instanceof Error ? err.message : 'Có lỗi không xác định');
     }
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  // Delete confirm
+  const handleDelete = async () => {
+    if (!modals.deletingProduct) return;
+    setIsDeleting(true);
+    try {
+      const res = await fetch(`http://localhost:8000/api/v1/products/${modals.deletingProduct.id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Xoá thất bại');
+      refresh();
+      modals.closeAll();
+    } catch (err) {
+      console.error(err);
+      alert(err instanceof Error ? err.message : 'Có lỗi không xác định');
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
-    <div className={`${sharedStyles.pageContent} ${isActive ? sharedStyles.active : ''}`}>
-      <div className={styles.productTable}>
-        <div className={styles.tableHeader}>
-          <div>Img</div>
-          <div>Name</div>
-          <div className={styles.hideMobile}>Mô tả</div>
-          <div>Giá</div>
-          <div>Chức năng</div>
-        </div>
+    <div className={styles.container}>
+      <div className={styles.pageHeader}>
+        <h2 className={styles.title}>Danh sách sản phẩm</h2>
+        <button onClick={modals.openAddModal} className={`${styles.btn} ${styles.btnPrimary}`}>+ Thêm mới</button>
+      </div>
 
-        {currentProducts.map((product) => (
-          <div className={styles.tableRow} key={product.id}>
-            <Image src={product.imageUrl} alt={product.name} width={50} height={50} className={styles.productImage} />
-            <div className={styles.productInfo}>
-              <div className={styles.productName}>{product.name}</div>
-              <div className={styles.productDesc}>{product.desc}</div>
+      <div className={styles.productListContainer}>
+        <div className={styles.tableHeader}>
+          <div>Ảnh</div><div>Tên & Mô tả</div><div>Giá</div><div>Giảm giá</div><div style={{ textAlign: 'right' }}>Chức năng</div>
+        </div>
+        {loading ? (
+          <div className={styles.statusMessage}>Đang tải...</div>
+        ) : products.length === 0 ? (
+          <div className={styles.statusMessage}>Không có sản phẩm nào.</div>
+        ) : products.map(product => (
+          <div key={product.id} className={styles.tableRow}>
+            <div className={styles.productImageWrapper}>
+              {product.image ? <Image src={product.image} alt={product.name} width={50} height={50} /> : <div className={styles.noImage} />}
             </div>
-            <div className={styles.hideMobile}>{product.price}</div>
-            <div className={styles.productPrice}>{product.price}</div>
+            <div><div>{product.name}</div><div>{product.description}</div></div>
+            <div>{product.price ? `${Number(product.price).toLocaleString('vi-VN')} ₫` : '—'}</div>
+            <div>{product.discount_price ? `${Number(product.discount_price).toLocaleString('vi-VN')} ₫` : '—'}</div>
             <div className={styles.productActions}>
-              <button className={`${styles.actionBtn} ${styles.editBtn}`} onClick={() => handleEdit(product)}>Sửa</button>
-              <button className={`${styles.actionBtn} ${styles.deleteBtn}`} onClick={() => handleDelete(product.id)}>Xóa</button>
+              <button onClick={() => modals.openEditModal(product)} className={`${styles.actionBtn} ${styles.editBtn}`}>Sửa</button>
+              <button onClick={() => modals.openDeleteModal(product)} className={`${styles.actionBtn} ${styles.deleteBtn}`}>Xoá</button>
             </div>
           </div>
         ))}
       </div>
 
-      <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />
+      {pagination && pagination.last_page > 1 && (
+        <div className={styles.pagination}>
+          {pagination.links.map((link: any, i: number) => (
+            <button key={i} disabled={!link.url}
+              className={`${styles.pageButton} ${link.active ? styles.active : ''}`}
+              onClick={() => { const u = new URL(link.url); setPage(Number(u.searchParams.get('page'))); }}
+              dangerouslySetInnerHTML={{ __html: link.label }} />
+          ))}
+        </div>
+      )}
+
+      <ProductFormModal
+        isOpen={modals.isFormModalOpen}
+        onClose={modals.closeAll}
+        onSubmit={handleFormSubmit}
+        product={modals.editingProduct}
+        categories={categories}
+      />
+
+      <DeleteConfirmModal
+        isOpen={modals.isDeleteModalOpen}
+        onClose={modals.closeAll}
+        onConfirm={handleDelete}
+        productName={modals.deletingProduct?.name || ''}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 };

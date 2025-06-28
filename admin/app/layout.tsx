@@ -1,5 +1,4 @@
-// app/layout.tsx - SỬA ĐỔI NƠI ĐÂY
-
+// app/layout.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -13,17 +12,10 @@ import ProductsPageContent from '@/components/PageContents/ProductsPageContent';
 import OrdersPageContent from '@/components/PageContents/OrdersPageContent';
 import PromotePageContent from '@/components/PageContents/PromotePageContent';
 import ProfilePageContent from '@/components/PageContents/ProfilePageContent';
+import SettingsPageContent from '@/components/PageContents/SettingsPageContent';
+import CategoriesPageContent from '@/components/PageContents/CategoriesPageContent';
 
-
-// XÓA DÒNG NÀY (metadata) TỪ ĐÂY
-// export const metadata = {
-//   title: 'ADM Manager',
-//   description: 'Next.js Dashboard Application',
-// };
-
-interface PageTitlesMap {
-  [key: string]: string;
-}
+import { CategoryProvider } from '@/components/contexts/CategoryContext'; // ✅ THÊM DÒNG NÀY
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
@@ -31,10 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [currentHeaderTitle, setCurrentHeaderTitle] = useState<string>('Quản lý Sản Phẩm');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const pageTitlesMap: PageTitlesMap = {
+  const pageTitlesMap = {
     home: 'Trang chủ',
     products: 'Quản lý Sản Phẩm',
     orders: 'Quản lý Đơn Hàng',
+    categories: 'Quản lý Danh Mục',
     promote: 'Promote',
     profile: 'Profile',
     settings: 'Setting',
@@ -61,9 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     };
   }, []);
 
-  const toggleSidebar = () => {
-    setIsSidebarCollapsed(prev => !prev);
-  };
+  const toggleSidebar = () => setIsSidebarCollapsed(prev => !prev);
 
   const handlePageChange = (pageId: string) => {
     setActivePage(pageId);
@@ -75,46 +66,60 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     setSearchTerm(query);
   };
 
-  const handleAddClick = () => {
-    alert('Chức năng thêm sản phẩm sẽ được phát triển trong phiên bản tiếp theo!');
+  const renderContent = () => {
+    switch (activePage) {
+      case 'home':
+        return <HomePageContent isActive />;
+      case 'products':
+        return <ProductsPageContent isActive searchTerm={searchTerm} />;
+      case 'orders':
+        return <OrdersPageContent isActive />;
+      case 'categories':
+        return <CategoriesPageContent isActive searchTerm={searchTerm} />;
+      case 'promote':
+        return <PromotePageContent isActive />;
+      case 'profile':
+        return <ProfilePageContent isActive />;
+      case 'settings':
+        return <SettingsPageContent isActive />;
+      default:
+        return <ProductsPageContent isActive searchTerm={searchTerm} />;
+    }
   };
 
   return (
     <html lang="vi">
       <body>
-        <div className="container" style={{ display: 'flex', height: '100vh' }}>
-          <Sidebar
-            isCollapsed={isSidebarCollapsed}
-            toggleSidebar={toggleSidebar}
-            activePage={activePage}
-            onPageChange={handlePageChange}
-          />
-          <div
-            className="main-content"
-            style={{
-              marginLeft: isSidebarCollapsed ? 'var(--sidebar-width-collapsed)' : 'var(--sidebar-width-expanded)',
-              transition: 'margin-left 0.3s ease',
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <Header
-              pageTitle={currentHeaderTitle}
-              onSearch={handleSearch}
-              onAddClick={handleAddClick}
+        <CategoryProvider> {/* ✅ BỌC TOÀN BỘ ỨNG DỤNG TRONG PROVIDER */}
+          <div className="container" style={{ display: 'flex', height: '100vh' }}>
+            <Sidebar
+              isCollapsed={isSidebarCollapsed}
+              toggleSidebar={toggleSidebar}
+              activePage={activePage}
+              onPageChange={handlePageChange}
             />
-            <div className={ContentStyles.content}>
-              <HomePageContent isActive={activePage === 'home'} />
-              <ProductsPageContent isActive={activePage === 'products'} searchTerm={searchTerm} />
-              <OrdersPageContent isActive={activePage === 'orders'} />
-              <PromotePageContent isActive={activePage === 'promote'} />
-              <ProfilePageContent isActive={activePage === 'profile'} />
-             
+            <div
+              className="main-content"
+              style={{
+                marginLeft: isSidebarCollapsed ? 'var(--sidebar-width-collapsed)' : 'var(--sidebar-width-expanded)',
+                transition: 'margin-left 0.3s ease',
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Header
+                pageTitle={currentHeaderTitle}
+                onSearch={handleSearch}
+                onAddClick={() => {}}
+              />
+              <div className={ContentStyles.content}>
+                {renderContent()}
+              </div>
             </div>
           </div>
-        </div>
-        {children}
+          {children}
+        </CategoryProvider>
       </body>
     </html>
   );

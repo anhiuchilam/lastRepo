@@ -1,0 +1,315 @@
+/* components/Products/ProductFormModal.module.css */
+
+/* --- MODAL OVERLAY --- */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 20px 0;
+}
+
+.modalContent {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    width: 95%;
+    max-width: 600px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 25px;
+}
+
+.modalHeader h3 {
+    margin: 0;
+    font-size: 22px;
+    color: #333;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #888;
+    padding: 0 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+    background-color: #f0f0f0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.formGroup {
+    margin-bottom: 0;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.95em;
+}
+
+.formInput,
+.formSelect,
+.formTextarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.formInput:focus,
+.formSelect:focus,
+.formTextarea:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.formTextarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.formError {
+    color: #dc3545;
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+.imagePreview {
+    margin-top: 15px;
+    border: 1px dashed #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    display: inline-block;
+}
+.imagePreview img {
+    display: block;
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* --- Reusable Buttons (copied from ProductsPageContent.module.css) --- */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.btnPrimary {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+.btnPrimary:hover {
+    background-color: var(--dark-blue-hover);
+}
+
+.btnSecondary {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+.btnSecondary:hover {
+    background-color: #dee2e6;
+}
+
+.btnDanger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btnDanger:hover {
+    background-color: #c82333;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* --- Variable Product Specific Styles --- */
+.variantsSection {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px dashed #ddd;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+}
+
+.sectionTitle {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #a0cffc;
+}
+
+.variantFieldset {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    background-color: white;
+}
+
+.variantFieldset legend {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #555;
+    padding: 0 10px;
+}
+
+.variantGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.removeVariantBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.removeVariantBtn:hover {
+    background-color: #c82333;
+}
+
+.addVariantBtn {
+    background-color: #28a745; /* Green */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    transition: background-color 0.2s;
+}
+
+.addVariantBtn:hover {
+    background-color: #218838;
+}
+
+/* --- DeleteConfirmModal Specific Styles --- */
+.modalBody {
+    padding: 20px 0;
+    font-size: 1.1em;
+    color: #555;
+    text-align: center;
+}
+.modalBody strong {
+    color: #333;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 600px) {
+    .modalContent {
+        padding: 20px;
+    }
+    .modalHeader h3 {
+        font-size: 20px;
+    }
+    .closeButton {
+        font-size: 24px;
+    }
+    .formGrid, .variantGrid {
+        grid-template-columns: 1fr;
+    }
+    .modalFooter {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+    .modalFooter .btn {
+        width: 100%;
+    }
+    .removeVariantBtn {
+        position: static;
+        margin-top: 10px;
+        width: 100%;
+    }
+    .variantsSection {
+        padding: 15px;
+    }
+}

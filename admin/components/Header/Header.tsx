@@ -27,12 +27,7 @@ const Header: React.FC<HeaderProps> = ({ pageTitle, onSearch, onAddClick }) => {
         </div>
       </div>
       <div className={styles.headerRight}>
-        {pageTitle === 'Quản lý Sản Phẩm' && (
-          <button className={styles.addBtn} onClick={onAddClick}>
-            <FontAwesomeIcon icon={faPlus} />
-            <span>Thêm sản phẩm</span>
-          </button>
-        )}
+       
         <div className={styles.userInfo}>
           <div className={styles.userAvatar}>HR</div>
           <div className={styles.userName}>Hồ Hùng Rene</div>

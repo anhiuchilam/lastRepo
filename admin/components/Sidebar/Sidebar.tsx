@@ -1,9 +1,9 @@
-
+// components/Sidebar/Sidebar.tsx
 'use client';
 
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBoxOpen, faClipboardList, faBullhorn, faUser, faCog, faAngleLeft, faAngleRight, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBoxOpen, faClipboardList, faBullhorn, faUser, faCog, faAngleLeft, faAngleRight, faTags, IconDefinition } from '@fortawesome/free-solid-svg-icons'; // Import faTags
 import styles from './Sidebar.module.css';
 
 interface MenuItem {
@@ -24,6 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, toggleSidebar, activePag
     { id: 'home', name: 'Trang chủ', icon: faHome },
     { id: 'products', name: 'Quản lý sản phẩm', icon: faBoxOpen },
     { id: 'orders', name: 'Quản lý đơn hàng', icon: faClipboardList },
+    { id: 'categories', name: 'Quản lý danh mục', icon: faTags }, // Thêm mục mới ở đây
     { id: 'promote', name: 'Promote', icon: faBullhorn },
     { id: 'profile', name: 'Profile', icon: faUser },
     { id: 'settings', name: 'Setting', icon: faCog },
