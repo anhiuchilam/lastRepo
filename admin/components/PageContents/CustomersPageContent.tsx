@@ -45,7 +45,7 @@ const initialCustomers: Customer[] = [
 ];
 
 // API_BASE_URL_CUSTOMERS không cần nếu không gọi API
-// const API_BASE_URL_CUSTOMERS = 'http://localhost:8000/api/v1';
+const API_BASE_URL_CUSTOMERS = 'http://localhost:8000/api/v1/public';
 
 // --- COMPONENT MODAL FORM (Định nghĩa inline) ---
 // XÓA TOÀN BỘ CUSTOMERFORMMODAL NÀY (Vì không cần form thêm/sửa)

@@ -47,7 +47,7 @@ const initialDiscountCodes: DiscountCode[] = [
 ];
 
 // Định nghĩa base URL cho API Laravel (giữ nguyên, sẽ không gọi cho demo)
-const API_BASE_URL_DISCOUNT_CODES = 'http://localhost:8000/api/v1';
+const API_BASE_URL_DISCOUNT_CODES = 'http://localhost:8000/api/v1/public';
 
 // --- COMPONENT MODAL FORM (Định nghĩa inline) ---
 const DiscountCodeFormModal = ({

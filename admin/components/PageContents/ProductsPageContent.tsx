@@ -9,7 +9,18 @@ import DeleteConfirmModal from "../Products/DeleteConfirmModal";
 
 // Interfaces
 interface Category { id: number; name: string; slug: string; }
-interface Product { id: number; name: string; slug: string; description: string; price: string | null; discount_price: string | null; image: string | null; category: Category; }
+interface Product { 
+  id: number; 
+  name: string; 
+  slug: string; 
+  description: string; 
+  price: string | null; 
+  discount_price: string | null; 
+  image: string | null; 
+  category: Category; 
+  category_id: number;
+  product_type: 'simple' | 'variable';
+}
 interface ApiResponse { data: Product[]; meta: any; links: any; }
 type FormValues = { name: string; description: string; price?: number; discount_price?: number; category_id: number; product_type: 'simple' | 'variable'; image?: FileList; };
 
@@ -23,7 +34,7 @@ const useProducts = (page: number) => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:8000/api/v1/products?page=${page}`);
+        const res = await fetch(`http://localhost:8000/api/v1/public/products?page=${page}`);
         const json: ApiResponse = await res.json();
         setProducts(json.data);
         setPagination(json.meta);
@@ -46,7 +57,7 @@ const useCategories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/v1/categories`);
+        const res = await fetch(`http://localhost:8000/api/v1/public/categories`);
         const json = await res.json();
         setCategories(json.data);
       } catch (err) {
@@ -103,8 +114,8 @@ const ProductsPageContent = () => {
     if (modals.editingProduct) formData.append('_method', 'PUT');
 
     const url = modals.editingProduct
-      ? `http://localhost:8000/api/v1/products/${modals.editingProduct.id}`
-      : 'http://localhost:8000/api/v1/products';
+      ? `http://localhost:8000/api/v1/public/products/${modals.editingProduct.id}`
+      : 'http://localhost:8000/api/v1/public/products';
     console.log(url, data);
     
     try {
@@ -123,7 +134,7 @@ const ProductsPageContent = () => {
     if (!modals.deletingProduct) return;
     setIsDeleting(true);
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/products/${modals.deletingProduct.id}`, { method: 'DELETE' });
+      const res = await fetch(`http://localhost:8000/api/v1/public/products/${modals.deletingProduct.id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Xoá thất bại');
       refresh();
       modals.closeAll();
@@ -183,6 +194,7 @@ const ProductsPageContent = () => {
         onSubmit={handleFormSubmit}
         product={modals.editingProduct}
         categories={categories}
+        isLoadingFormSubmit={false}
       />
 
       <DeleteConfirmModal

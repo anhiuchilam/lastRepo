@@ -6,7 +6,7 @@ import styles from './CategoriesPageContent.module.css';
 import sharedStyles from '../Content/Content.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { useCategories, Category } from '@/components/contexts/CategoryContext'; // Import useCategories và Category từ Context
+import { useCategories, Category } from '@/contexts/CategoryContext'; // Import useCategories và Category từ Context
 
 // XÓA BỎ HOÀN TOÀN initialCategories khỏi đây, vì danh mục sẽ được tải từ API qua Context
 // export const initialCategories: Category[] = [

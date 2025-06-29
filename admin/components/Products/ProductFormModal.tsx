@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler, useFieldArray, Control } from 'react-hook-form';
 import Image from 'next/image';
 import styles from './ProductFormModal.module.css';
-import { Category } from '@/contexts/Category/CategoryContext'; // Kiểm tra lại đường dẫn chính xác của CategoryContext nếu cần
+import { Category } from '@/contexts/CategoryContext'; // Kiểm tra lại đường dẫn chính xác của CategoryContext nếu cần
 import { Product, FormValues } from './ProductInterfaces'; // Import Product và FormValues từ file interfaces
 
 // --- COMPONENT MODAL FORM ---

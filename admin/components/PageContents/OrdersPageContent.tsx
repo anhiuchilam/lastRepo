@@ -55,7 +55,7 @@ const initialOrders: Order[] = [
 ];
 
 // Định nghĩa base URL cho API Laravel của bạn
-const API_BASE_URL = 'http://localhost:8000/api/v1'; // Đảm bảo đúng prefix /v1
+const API_BASE_URL = 'http://localhost:8000/api/v1/public'; // Đảm bảo đúng prefix /v1
 
 // --- Dành cho React Hook Form ---
 type OrderFormValues = {
